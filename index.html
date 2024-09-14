@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foreign Cinema Quiz</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Baloo 2', sans-serif;
+            background-color: #38B6FF; /* Background color */
+            color: black;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        #yellow-box {
+            width: 200px;
+            height: 200px;
+            background-color: #FED405; /* Yellow color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+            border: 5px solid black; /* Black edging */
+            transition: transform 0.1s ease-in-out;
+        }
+
+        #question-answer {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Keyframes for the bounce animation */
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Class to trigger the bounce animation */
+        .animate-bounce {
+            animation: bounce 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="yellow-box">FOREIGN CINEMA</div>
+
+    <div id="question-answer"></div>
+
+    <script>
+        const yellowBox = document.getElementById("yellow-box");
+        const questionAnswerDiv = document.getElementById("question-answer");
+
+        // Array of foreign cinema trivia questions and answers
+        const foreignCinemaQuestions = [
+            { question: "Which 1994 film by Quentin Tarantino is known for its non-linear narrative and eclectic dialogue?", answer: "Pulp Fiction" },
+            { question: "What is the title of the 2018 South Korean film directed by Bong Joon-ho that won the Palme d'Or at Cannes?", answer: "Parasite" },
+            { question: "In which 2000 film does Spanish director Alejandro Amenábar explore the story of a blind man in a dystopian future?", answer: "Open Your Eyes" },
+            { question: "Which Italian film, directed by Federico Fellini, is known for its surreal and fantastical sequences?", answer: "8½" },
+            { question: "What 2016 film, directed by Asghar Farhadi, deals with a couple's struggles following a dramatic event in Iran?", answer: "The Salesman" },
+            { question: "In which 2011 French film does a quadriplegic man and his caregiver form an unlikely but heartfelt bond?", answer: "The Intouchables" },
+            { question: "Which 2019 film directed by Pedro Almodóvar stars Penélope Cruz as an actress seeking to reconnect with her daughter?", answer: "Pain and Glory" },
+            { question: "Which Japanese film, directed by Akira Kurosawa, is a tale of a samurai seeking redemption and is known for its epic battle scenes?", answer: "Seven Samurai" },
+            { question: "What 2002 film directed by Michael Haneke is a French psychological thriller about a family terrorized by masked strangers?", answer: "Funny Games" },
+            { question: "Which 1999 Brazilian film, directed by Fernando Meirelles and Kátia Lund, depicts the violence and gang wars of Rio de Janeiro?", answer: "City of God" },
+            { question: "Which 2006 film by Japanese director Hirokazu Kore-eda is a poignant family drama about a child who is discovered to be swapped at birth?", answer: "Nobody Knows" },
+            { question: "Which French film, directed by Jean-Pierre Jeunet, is a whimsical love story set in a fantastical version of Paris?", answer: "Amélie" },
+            { question: "What 1988 film by Studio Ghibli, directed by Isao Takahata, is an animated tale of two siblings struggling to survive during World War II?", answer: "Grave of the Fireflies" },
+            { question: "What 2003 film directed by Wong Kar-wai is a romantic drama set in 1960s Hong Kong, known for its distinctive visual style?", answer: "In the Mood for Love" },
+            { question: "What 2004 film, directed by Ang Lee, is a Taiwanese epic that tells the story of a forbidden romance between two cowboys?", answer: "Brokeback Mountain" },
+            { question: "Which 2014 film directed by Pedro Almodóvar explores the relationship between a mother and her daughter after a traumatic event?", answer: "Julieta" },
+            { question: "What 2002 film by Zhang Yimou is a Chinese epic historical drama featuring martial arts and romance?", answer: "Hero" },
+            { question: "Which 2019 South Korean film directed by Bong Joon-ho is a darkly comedic thriller exploring class struggles and social inequality?", answer: "Parasite" },
+            { question: "Which 2015 French film directed by Jacques Audiard follows a young Arab's journey through the Parisian underworld?", answer: "Dheepan" },
+            { question: "What 1998 film by Lars von Trier is known for its controversial and provocative themes, set in a dystopian future?", answer: "Dancer in the Dark" },
+            { question: "Which 1994 film directed by Wong Kar-wai is a romantic drama set in Hong Kong during the 1960s?", answer: "Chungking Express" },
+            { question: "Which 2019 French film directed by Ladj Ly explores the tensions between police and residents in a Parisian suburb?", answer: "Les Misérables" },
+            { question: "Which 2006 film by Guillermo del Toro is a Spanish-language fantasy film about a young girl's imaginative escape from reality?", answer: "Pan's Labyrinth" },
+            { question: "What 2018 South Korean film directed by Kim Ji-woon is a horror-thriller about a man who starts to see supernatural events?", answer: "The Drug King" },
+            { question: "Which 2018 French film directed by Michel Hazanavicius is a silent film about a woman's struggle in the 1960s French cinema?", answer: "The Artist" },
+            { question: "What 2012 Danish film directed by Thomas Vinterberg follows a teacher who is falsely accused of child abuse?", answer: "The Hunt" },
+            { question: "Which 2011 Iranian film directed by Asghar Farhadi tells the story of a family torn apart by a divorce?", answer: "A Separation" },
+            { question: "Which 2004 film directed by Lars von Trier is about a woman's emotional struggles during a catastrophic event?", answer: "Melancholia" },
+            { question: "What 2007 French film directed by Michel Gondry stars Audrey Tautou as a quirky woman who tries to improve the lives of those around her?", answer: "The Science of Sleep" },
+            { question: "Which 2000 film by Japanese director Hirokazu Kore-eda explores the story of a family dealing with the challenges of taking in a young boy?", answer: "Like Father, Like Son" },
+            { question: "What 1995 French film directed by Jacques Audiard is a gritty portrayal of the Parisian underworld?", answer: "The Prophet" },
+            { question: "Which 2019 film by Bong Joon-ho is a darkly comedic thriller about a family's struggles to climb the social ladder?", answer: "Parasite" },
+            { question: "What 2004 film directed by Wong Kar-wai is a visually stunning romantic drama set in 1960s Hong Kong?", answer: "2046" },
+            { question: "Which 2016 film directed by Cristian Mungiu explores the impact of a father's attempts to help his daughter achieve a better future in Romania?", answer: "Graduation" },
+            { question: "What 1994 film directed by Akira Kurosawa is a historical epic about a samurai seeking redemption?", answer: "Red Beard" },
+            { question: "Which 2015 South Korean film directed by Yeon Sang-ho is a zombie apocalypse movie set on a train?", answer: "Train to Busan" },
+            { question: "Which 2007 French film directed by Michel Gondry stars Audrey Tautou as a whimsical woman trying to make a difference in the lives of others?", answer: "The Science of Sleep" },
+            { question: "What 2018 French film directed by Michel Hazanavicius is a silent film about a woman's struggle to achieve her dreams?", answer: "The Artist" },
+            { question: "Which 2012 Iranian film directed by Asghar Farhadi is a drama about a family dealing with issues of love and betrayal?", answer: "The Past" },
+            { question: "What 1995 Spanish film directed by Pedro Almodóvar is known for its vibrant storytelling and focus on complex female characters?", answer: "Talk to Her" }
+        ];
+
+        let shuffledQuestions = [];
+        let questionIndex = 0;
+
+        // Shuffle the questions array
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize questions
+        function initializeQuestions() {
+            shuffledQuestions = shuffleArray([...foreignCinemaQuestions]);
+            questionIndex = 0;
+            displayQuestion();
+        }
+
+        // Function to display the current question
+        function displayQuestion() {
+            if (shuffledQuestions.length === 0) {
+                questionAnswerDiv.innerHTML = "<strong>No more questions!</strong>";
+                return;
+            }
+            const currentQA = shuffledQuestions[questionIndex];
+            questionAnswerDiv.innerHTML = `<strong>Question:</strong> ${currentQA.question}<br><strong>Answer:</strong> ${currentQA.answer}`;
+        }
+
+        // Bounce animation on click
+        yellowBox.addEventListener("click", () => {
+            yellowBox.classList.add("animate-bounce");
+            setTimeout(() => {
+                yellowBox.classList.remove("animate-bounce");
+            }, 300);
+            questionIndex = (questionIndex + 1) % shuffledQuestions.length;
+            displayQuestion();
+        });
+
+        // Initialize the quiz
+        initializeQuestions();
+    </script>
+
+</body>
+</html>
